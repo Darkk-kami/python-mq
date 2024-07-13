@@ -5,7 +5,6 @@ from email.mime.multipart import MIMEMultipart  # To create a multipart email me
 from email.mime.text import MIMEText  # To attach text content to the email
 import os  # To access environment variables
 import dotenv  # To load environment variables from a .env file
-import datetime  # To handle date and time operations
 import logging  # To log messages
 
 # Define the log file location and logging configuration
@@ -20,10 +19,6 @@ app = Celery('app',
              broker='amqp://localhost',  # Message broker URL (RabbitMQ in this case)
              backend='rpc://')  # Result backend URL (RPC in this case)
 
-# Function to get the current time formatted as a string
-def time():
-    current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    return current_time
 
 # Define a Celery shared task for sending emails
 @shared_task()
@@ -58,10 +53,3 @@ def send_mail_task(email):
         error = f'Failed to send email to {email}: {str(e)}'
         logging.error(error)
         return f'Failed to send email to {email}: {str(e)}'
-
-# Define a Celery shared task for logging the current time
-@shared_task()
-def talk_to_me_task():
-    log_entry = f"{time()}"  # Get the current time
-    logging.info(f"Hello request at {log_entry}")
-

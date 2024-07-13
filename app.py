@@ -1,8 +1,9 @@
 # Import necessary modules
 from flask import Flask, render_template, request, send_file  # Flask framework and relevant modules
 from celery import Celery  # Celery for asynchronous task management
-from tasks import send_mail_task, talk_to_me_task  # Import custom Celery tasks
+from tasks import send_mail_task # Import custom Celery tasks
 import logging  # To log messages
+from datetime import datetime # To handle date and time operations
 
 # Define the log file location and logging configuration
 log_file = 'var/logs/messaging_system.logs'
@@ -46,9 +47,10 @@ def index():
 
     # If the 'talktome' parameter is present, log the current time
     if talktome_param:
-        talk_to_me_task.delay()  # Schedule the talk_to_me_task asynchronously
         client_ip = request.remote_addr  # Get the IP address of the client
-        return f'Logging current access time from IP - {client_ip}'
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Get the current time
+        logging.info(f"Hello request at {current_time}")
+        return f"Logged Hello Request at {current_time} from {client_ip}"
 
     # If no valid parameters are provided, return a message
     return 'No valid parameters provided'
