@@ -44,8 +44,9 @@ celery -A tasks worker --loglevel=info -P gevent -n worker1@%h
 ## Usage
 ### Access and testing the endpoints:
 By default
-- ***To generate endpoint access time logs:*** http://localhost:5000/messaging?talktome=true
+- ***To generate access time logs at endpoint:*** http://localhost:5000/messaging?talktome=true
 - ***To send a test email:*** http://localhost:5000/messaging?sendmail=example@mail.com
+- ***To access logs:*** http://localhost:5000/logs
 
 
 
