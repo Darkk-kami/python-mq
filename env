@@ -1,0 +1,12 @@
+# Flask app settings
+FLASK_ENV=development
+FLASK_APP=app.py
+SECRET_KEY=your_secret_key_here
+
+# Celery settings
+CELERY_BROKER_URL=amqp://localhost
+CELERY_RESULT_BACKEND=rpc://
+
+# Email settings (if using Gmail)
+SENDER_EMAIL=your_email@gmail.com
+EMAIL_PASSWORD=your_password
