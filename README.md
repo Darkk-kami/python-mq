@@ -28,7 +28,7 @@ Start-Service rabbitmq-server
 - After starting the service, you can access the RabbitMQ Management Dashboard using your web browser: URL: http://localhost:15672/ Username: guest Password: guest
 
 
-### **SMTP server: e.g., Gmail for sending emails (optional)
+### **SMTP server:** e.g., Gmail for sending emails (optional)
 
 ## Deployment
 ### Start the Flask Web Server: The application will run at http://localhost:5000 by default.
