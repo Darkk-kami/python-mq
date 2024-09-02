@@ -1,11 +1,10 @@
-# Import necessary modules
-from celery import Celery, shared_task  # Celery is an asynchronous task queue/job queue
-import smtplib  # SMTP protocol client to send email
-from email.mime.multipart import MIMEMultipart  # To create a multipart email message
-from email.mime.text import MIMEText  # To attach text content to the email
-import os  # To access environment variables
-import dotenv  # To load environment variables from a .env file
-import logging  # To log messages
+from celery import Celery, shared_task
+import smtplib 
+from email.mime.multipart import MIMEMultipart 
+from email.mime.text import MIMEText 
+import os 
+import dotenv  
+import logging
 
 # Define the log file location and logging configuration
 log_file = 'var/logs/messaging_system.logs'
@@ -16,8 +15,8 @@ dotenv.load_dotenv()
 
 # Initialize Celery application
 app = Celery('app',
-             broker='amqp://localhost',  # Message broker URL (RabbitMQ in this case)
-             backend='rpc://')  # Result backend URL (RPC in this case)
+             broker='amqp://localhost',
+             backend='rpc://') 
 
 
 # Define a Celery shared task for sending emails
@@ -34,9 +33,8 @@ def send_mail_task(email):
     message = MIMEMultipart()
     message['From'] = sender_email
     message['To'] = email
-    message['Subject'] = 'Testing'  # Subject of the email
+    message['Subject'] = 'Testing'
 
-    # Email body
     body = 'Hello from Dwayne'
     message.attach(MIMEText(body, 'plain'))
 
@@ -44,11 +42,13 @@ def send_mail_task(email):
         logging.info(f"Connecting to SMTP server...")
         # Connect to the SMTP server using SSL
         server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-        server.login(sender_email, sender_password)  # Login to the SMTP server
-        server.sendmail(sender_email, email, message.as_string())  # Send the email
-        server.quit()  # Terminate the SMTP session
+        server.login(sender_email, sender_password) 
+        server.sendmail(sender_email, email, message.as_string())
+        server.quit() 
+      
         logging.info(f"Email sent successfully to {email}")
         return f'Email sent successfully to {email}'
+      
     except smtplib.SMTPException as e:
         error = f'Failed to send email to {email}: {str(e)}'
         logging.error(error)
