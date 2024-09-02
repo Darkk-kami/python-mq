@@ -1,9 +1,8 @@
-# Import necessary modules
-from flask import Flask, render_template, request, send_file  # Flask framework and relevant modules
-from celery import Celery  # Celery for asynchronous task management
-from tasks import send_mail_task # Import custom Celery tasks
-import logging  # To log messages
-from datetime import datetime # To handle date and time operations
+from flask import Flask, render_template, request, send_file 
+from celery import Celery  
+from tasks import send_mail_task 
+import logging 
+from datetime import datetime 
 
 # Define the log file location and logging configuration
 log_file = 'var/logs/messaging_system.logs'
@@ -13,10 +12,8 @@ logging.basicConfig(filename=log_file, level=logging.INFO)
 # Function to get the client's IP address
 def get_client_ip():
     if request.headers.get('X-Forwarded-For'):
-        # If the request passed through a proxy, use the first IP in the 'X-Forwarded-For' header
         ip = request.headers['X-Forwarded-For'].split(',')[0]
     else:
-        # Otherwise, use the remote address
         ip = request.remote_addr
     return ip
 
@@ -24,13 +21,11 @@ def get_client_ip():
 # Initialize Flask application
 app = Flask(__name__)
 
-# Initialize Celery application
 celery = Celery('app',
                 broker='amqp://localhost',  # Message broker URL (RabbitMQ)
                 backend='rpc://')  # Result backend URL (RPC)
 
 
-# Define a route for the home page
 @app.route('/')
 def index():
     # Log access to the site with the client's IP address
@@ -60,7 +55,6 @@ def index():
 @app.route('/logs', methods=['GET'])
 def get_logs():
     try:
-        # Open and read the log file
         with open(log_file, 'r') as file:
             log_content = file.read()
             return log_content, 200, {'Content-Type': 'text/plain; charset=utf-8'}
@@ -71,6 +65,6 @@ def get_logs():
 
 # Run the Flask application
 if __name__ == '__main__':
-    app.run(debug=True)  # Run the app in debug mode
+    app.run(debug=True) 
 
 
